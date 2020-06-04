@@ -19,7 +19,8 @@ states = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", 
           "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio",
           "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas",
           "Utah", "Vermont", "Washington", "West Virginia", "Wisconsin", "Wyoming"]
-mayors = [("Name", "Location", "Phone", "Email")]
+mayors = [("ID", "Name", "Location", "Phone", "Email")]
+num = 1
 for state in states:
     br.select_form(id="searchform")
     br["searchTerm"] = state
@@ -45,8 +46,9 @@ for state in states:
             else:
                 contact.append(m.get_text())
         if len(contact) == 2:
-            mayor = (name, location, contact[0], contact[1])
+            mayor = (num, name, location, contact[0], contact[1])
             mayors.append(mayor)
+            num += 1
 
 with open('mayors.csv', 'w', newline='') as csvfile:
     write = csv.writer(csvfile, quoting=csv.QUOTE_ALL)
