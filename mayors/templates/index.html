@@ -22,84 +22,14 @@
 </div>
 
 
-<form id='checks'>
+<form>
     <div class="input-group form-control">
         <textarea class="form-control" rows="5"></textarea>
     </div>
-
-    <div class="text-center">
-        <h3>#2: Select your recipients</h3>
-        <h5>
-            Search for mayors and city officials by name or abbreviated state(ex. MA)
-        </h5>
-    </div>
-
     <div>
-        <form>
-            <input id="auto" class="form-control" type="text" placeholder="Search for city officials">
-        </form>
-    </div>
-
-
-    <div class="table-wrapper">
-        <table class="table-bordered">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>City</th>
-                    <th>Phone</th>
-                    <th>Email</th>
-                    <th>Select</th>
-                </tr>
-            </thead>
-                <tbody id="table">
-                    {% for result in results %}
-                    <tr>
-                        <td>
-                            {{result.name}}
-                        </td>
-                        <td>
-                            {{result.location}}
-                        </td>
-                        <td>
-                            {{result.phone}}
-                        </td>
-                        <td>
-                            {{result.email}}
-                        </td>
-                        <td >
-                            <input type="checkbox" id="checkbox" name="checkbox" value="{{result.id}}">
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-        </table>
-    </div>
-    <div>
-        <input type="submit">
+        <input type="submit" value="#2: Select Recipients" formaction="{{ url_for('recipients') }}">
     </div>
 </form>
 
-<script>
-$(document).ready(function(){
-  $('#auto').on("keyup", function() {
-    var value = $(this).val();
-    $('#table tr').filter(function() {
-      $(this).toggle($(this).text().indexOf(value) > -1)
-    });
-  });
-});
-
-var add = function() {
-    var sel = [];
-        $("input[name=checkbox]:checked").map(function() {
-          sel.push($(this).val());
-        });
-    console.log(sel);
-  }
-
-$("input[type=checkbox]").on("click", add);
-
-</script>
 
 {% endblock %}
