@@ -1,21 +1,59 @@
 {% extends 'base.html' %}
 
-{% block content %}
+{% block page_content %}
+
+
 <div>
-    <table>
-        <tr>
-            <td>
-                Hello
-            </td>
-            <td>
-                Hello
-            </td>
-        </tr>
-        <tr>
-            <td>
-                Hello
-            </td>
-        </tr>
+    <form>
+        <input id="auto" class="form-control" type="text" placeholder="Search for city officials">
+    </form>
+</div>
+
+<div class="table-wrapper">
+    <table class="table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>City</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Select</th>
+            </tr>
+        </thead>
+            <tbody id="table">
+                {% for result in results %}
+                <tr>
+                    <td>
+                        {{result.name}}
+                    </td>
+                    <td>
+                        {{result.location}}
+                    </td>
+                    <td>
+                        {{result.phone}}
+                    </td>
+                    <td>
+                        {{result.email}}
+                    </td>
+                    <td>
+                        <input type="checkbox" value="{{result.id}}">
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
     </table>
 </div>
+
+<script>
+$(document).ready(function(){
+  $('#auto').on("keyup", function() {
+    var value = $(this).val();
+    $('#table tr').filter(function() {
+      $(this).toggle($(this).text().indexOf(value) > -1)
+    });
+  });
+});
+</script>
+
+
 {% endblock %}
