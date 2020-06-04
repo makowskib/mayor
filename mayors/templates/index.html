@@ -2,47 +2,83 @@
 
 {% block page_content %}
 
-
-<div>
-    <form>
-        <input id="auto" class="form-control" type="text" placeholder="Search for city officials">
-    </form>
+<div class="text-center">
+    <h3>Email Local City Officials</h3>
+    <h5>
+        With this tool, you can quickly and efficiently contact city officials around the country. This contact
+        information was scraped from The United States Conference of Mayors (https://www.usmayors.org/mayors/), and
+        currently the database contains a little under 1500 entries (with some duplicates, sorry!). While I have no
+        reason to doubt the authenticity of the information, if there is a mayor or elected official that you
+        specifically need to contact, please check the addresses provided to make sure that they are going to the
+        correct person or office.
+    </h5>
 </div>
 
-<div class="table-wrapper">
-    <table class="table-bordered">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>City</th>
-                <th>Phone</th>
-                <th>Email</th>
-                <th>Select</th>
-            </tr>
-        </thead>
-            <tbody id="table">
-                {% for result in results %}
+<div class="text-center">
+    <h3>#1: Write your message</h3>
+    <h5>
+        While these messages will not be filtered, censored, or logged in any way, please be respectful.
+    </h5>
+</div>
+
+
+<form id='checks'>
+    <div class="input-group form-control">
+        <textarea class="form-control" rows="5"></textarea>
+    </div>
+
+    <div class="text-center">
+        <h3>#2: Select your recipients</h3>
+        <h5>
+            Search for mayors and city officials by name or abbreviated state(ex. MA)
+        </h5>
+    </div>
+
+    <div>
+        <form>
+            <input id="auto" class="form-control" type="text" placeholder="Search for city officials">
+        </form>
+    </div>
+
+
+    <div class="table-wrapper">
+        <table class="table-bordered">
+            <thead>
                 <tr>
-                    <td>
-                        {{result.name}}
-                    </td>
-                    <td>
-                        {{result.location}}
-                    </td>
-                    <td>
-                        {{result.phone}}
-                    </td>
-                    <td>
-                        {{result.email}}
-                    </td>
-                    <td>
-                        <input type="checkbox" value="{{result.id}}">
-                    </td>
+                    <th>Name</th>
+                    <th>City</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Select</th>
                 </tr>
-                {% endfor %}
-            </tbody>
-    </table>
-</div>
+            </thead>
+                <tbody id="table">
+                    {% for result in results %}
+                    <tr>
+                        <td>
+                            {{result.name}}
+                        </td>
+                        <td>
+                            {{result.location}}
+                        </td>
+                        <td>
+                            {{result.phone}}
+                        </td>
+                        <td>
+                            {{result.email}}
+                        </td>
+                        <td >
+                            <input type="checkbox" id="checkbox" name="checkbox" value="{{result.id}}">
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+        </table>
+    </div>
+    <div>
+        <input type="submit">
+    </div>
+</form>
 
 <script>
 $(document).ready(function(){
@@ -53,7 +89,17 @@ $(document).ready(function(){
     });
   });
 });
-</script>
 
+var add = function() {
+    var sel = [];
+        $("input[name=checkbox]:checked").map(function() {
+          sel.push($(this).val());
+        });
+    console.log(sel);
+  }
+
+$("input[type=checkbox]").on("click", add);
+
+</script>
 
 {% endblock %}
