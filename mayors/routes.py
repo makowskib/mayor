@@ -1,31 +1,29 @@
-import smtplib, email, sendgrid, os
+import urllib
+from urllib import parse
 from mayors import app, db
-from flask import render_template, url_for
+from flask import render_template, url_for, redirect, request
 from mayors.models import Mayors
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
 
-@app.route("/")
+
+@app.route("/", methods=['GET', 'POST'])
 def index():
-    return render_template("index.html")
-
-
-@app.route("/recipients")
-def recipients():
+    if request.method == "POST":
+        to = request.form.getlist('checkbox')
+        print(to)
+        return redirect(url_for('recipients', to=to))
     results = Mayors.query.all()
-    return render_template("recipients.html", results=results)
+    return render_template("index.html", results=results)
 
-@app.route("/mailtest")
-def mailtest():
-    message = Mail(
-        from_email='cushmanalex@gmail.com',
-        to_emails='to@example.com',
-        subject='Sending with Twilio SendGrid is Fun',
-        html_content='<strong>and easy to do anywhere, even with Python</strong>')
-    sg = SendGridAPIClient(app.config.get('SENDGRID_API_KEY'))
-    response = sg.send(message)
-    print(response.status_code)
-    print(response.body)
-    print(response.headers)
-    return render_template('index.html')
+
+@app.route("/email/<to>", methods=['GET', 'POST'])
+def recipients(to):
+    if request.method == "POST":
+        body = request.form.get('body')
+        subject = request.form.get('subject')
+        fr = request.form.get('from')
+        name = request.form.get('name')
+        return redirect(url_for('mailTo'))
+    return render_template("recipients.html", to=to)
+
+
 

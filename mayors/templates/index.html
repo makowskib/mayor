@@ -2,34 +2,73 @@
 
 {% block page_content %}
 
-<div class="text-center">
-    <h3>Email Local City Officials</h3>
-    <h5>
-        With this tool, you can quickly and efficiently contact city officials around the country. This contact
-        information was scraped from The United States Conference of Mayors (https://www.usmayors.org/mayors/), and
-        currently the database contains a little under 1500 entries (with some duplicates, sorry!). While I have no
-        reason to doubt the authenticity of the information, if there is a mayor or elected official that you
-        specifically need to contact, please check the addresses provided to make sure that they are going to the
-        correct person or office.
-    </h5>
-</div>
 
-<div class="text-center">
-    <h3>#1: Write your message</h3>
-    <h5>
-        While these messages will not be filtered, censored, or logged in any way, please be respectful.
-    </h5>
-</div>
+    <div class="text-center">
+        <h3>#1: Select your recipients</h3>
+        <h5>
+            Search for mayors and city officials by name or abbreviated state(ex. MA)
+        </h5>
+    </div>
 
+    <div class="form-control">
+        <form>
+            <input id="auto" class="col-md-4 col-md-offset-4 " type="text" placeholder="Search for city officials">
+        </form>
+    </div>
 
-<form id='checks'>
-    <div class="input-group form-control">
-        <textarea class="form-control" rows="5"></textarea>
-        <input
+    <div></div>
+
+    <div class="table-wrapper">
+        <table class="table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>City</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Select</th>
+                </tr>
+            </thead>
+            <form id="checks" action="/" method="POST">
+                <tbody id="table">
+                    {% for result in results %}
+                    <tr>
+                        <td>
+                            {{result.name}}
+                        </td>
+                        <td>
+                            {{result.location}}
+                        </td>
+                        <td>
+                            {{result.phone}}
+                        </td>
+                        <td>
+                            {{result.email}}
+                        </td>
+                        <td >
+                            <input type="checkbox"  name="checkbox" value="{{result.email}}">
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+        </table>
     </div>
     <div>
-        <input type="submit" value="#2: Search for City Officials" formaction="{{ url_for('recipients') }}">
+        <input type="submit">
     </div>
 </form>
+
+<script>
+
+$(document).ready(function(){
+  $('#auto').on("keyup", function() {
+    var value = $(this).val();
+    $('#table tr').filter(function() {
+      $(this).toggle($(this).text().indexOf(value) > -1)
+    });
+  });
+});
+
+</script>
 
 {% endblock %}

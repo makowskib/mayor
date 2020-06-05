@@ -12,4 +12,3 @@ CSRF_ENABLED = True
 CSRF_SESSION_KEY = 'secret'
 CSRF_SECRET = 'secret'
 
-SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
