@@ -1,4 +1,24 @@
-.table-wrapper {
-  height: 300px;
-  overflow-y: scroll;
+.table-responsive-sm{
+  overflow-y: auto;
+  height: 200px;
+}
+
+.table-wrapper thead th {
+  position: sticky;
+  top: 0;
+  background-color: white;
+}
+
+input {
+  width: 50% !important;
+}
+
+textarea {
+  width: 50% !important;
+}
+
+
+table {
+   margin: auto;
+   width: 50%;
 }

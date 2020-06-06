@@ -9,21 +9,23 @@ from mayors.models import Mayors
 def index():
     if request.method == "POST":
         to = request.form.getlist('checkbox')
-        print(to)
-        return redirect(url_for('recipients', to=to))
+        body = request.form.get('body')
+        subject = request.form.get('subject')
+
+        link = "mailto:" + to[0] + "?BCC="
+        for address in to[1:]:
+            if address is not None:
+                link += address + ","
+        link = link[:-1] + "&Subject=" + urllib.parse.quote(subject) + "&Body=" + urllib.parse.quote(body)
+        return redirect(url_for('mailto', link=link))
     results = Mayors.query.all()
     return render_template("index.html", results=results)
 
 
-@app.route("/email/<to>", methods=['GET', 'POST'])
-def recipients(to):
-    if request.method == "POST":
-        body = request.form.get('body')
-        subject = request.form.get('subject')
-        fr = request.form.get('from')
-        name = request.form.get('name')
-        return redirect(url_for('mailTo'))
-    return render_template("recipients.html", to=to)
+@app.route("/mailto/<link>", methods=['GET', 'POST'])
+def mailto(link):
+    return render_template("mailto.html", link=link)
+
 
 
 

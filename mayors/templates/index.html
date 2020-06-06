@@ -1,25 +1,27 @@
 {% extends 'base.html' %}
 
 {% block page_content %}
+<div class="text-center">
+    <h3>The only way to make
+        change is to continue to speak and push for reform. This tool will allow you to quickly find the contact
+        information of over 1400 US mayors and other local elected officials so that you can quickly and effectively
+        make your voice heard at a local level of government. After following the two steps, an email link will generate
+        to send the email in your local email client.</h3><br>
+
+    <h3>#1: Select your recipients</h3>
+    <h5>These emails were scraped from The United States Conference of Mayors (https://www.usmayors.org/).
+    When selecting an official to contact, please ensure that the contact information is correct. Search matches
+    inputted text, so if you want to search by state it must be entered in an abbreviated form (ex. MA).</h5>
+</div>
+
+<div class="text-center">
+    <input id="auto" type="text" placeholder="Search for city officials"> <br>
+</div><br>
 
 
-    <div class="text-center">
-        <h3>#1: Select your recipients</h3>
-        <h5>
-            Search for mayors and city officials by name or abbreviated state(ex. MA)
-        </h5>
-    </div>
-
-    <div class="form-control">
-        <form>
-            <input id="auto" class="col-md-4 col-md-offset-4 " type="text" placeholder="Search for city officials">
-        </form>
-    </div>
-
-    <div></div>
-
-    <div class="table-wrapper">
-        <table class="table-bordered">
+<form id="checks" action="/" method="POST">
+    <div class="table-wrapper table-responsive-sm">
+        <table class="table-bordered table-hover">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -29,32 +31,52 @@
                     <th>Select</th>
                 </tr>
             </thead>
-            <form id="checks" action="/" method="POST">
-                <tbody id="table">
-                    {% for result in results %}
-                    <tr>
-                        <td>
-                            {{result.name}}
-                        </td>
-                        <td>
-                            {{result.location}}
-                        </td>
-                        <td>
-                            {{result.phone}}
-                        </td>
-                        <td>
-                            {{result.email}}
-                        </td>
-                        <td >
-                            <input type="checkbox"  name="checkbox" value="{{result.email}}">
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
+            <br>
+            <tbody id="table">
+                {% for result in results %}
+                {% if result.email != 'None' %}
+                <tr>
+                    <td>
+                        {{result.name}}
+                    </td>
+                    <td>
+                        {{result.location}}
+                    </td>
+                    <td>
+                        {{result.phone}}
+                    </td>
+                    <td>
+                        {{result.email}}
+                    </td>
+                    <td >
+                        <input type="checkbox"  name="checkbox" value="{{result.email}}">
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
         </table>
     </div>
-    <div>
-        <input type="submit">
+
+    <div class="text-center" id="outline">
+        <h3>#2: Write your message</h3>
+        <h5>These messages will not be filtered, logged, or censored in any way. To ensure the link is valid, make sure
+        the total length is 1500 characters or less (including recipient addresses).</h5>
+    </div>
+
+    <div class="text-center">
+        <label>Email Subject:</label><br>
+        <input type="text" name="subject"><br><br>
+    </div>
+
+    <div class="text-center">
+        <label>Email Message:</label><br>
+        <textarea rows="7" name="body"></textarea>
+        <div id="count"></div>
+    </div>
+
+    <div class="text-center">
+        <input type="submit" value="Generate Email">
     </div>
 </form>
 
@@ -68,6 +90,24 @@ $(document).ready(function(){
     });
   });
 });
+
+$('[name=body], [name=subject]').keyup(update);
+$('[name=body], [name=subject]').keydown(update);
+$('input[name=checkbox]').click(update);
+
+function update(){
+    var bodycount = $('[name=body]').val().length;
+    var subjcount = $('[name=subject]').val().length;
+    var addr = [];
+    $('input[name=checkbox]:checked').map(function(){
+        addr.push($(this).val());
+    });
+    var addr_len = 0;
+    $.each(addr, function(index, value){
+        addr_len += value.length;
+    });
+    document.getElementById('count').innerHTML =  bodycount + subjcount + addr_len + "/1500";
+}
 
 </script>
 
