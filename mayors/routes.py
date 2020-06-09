@@ -1,6 +1,6 @@
 import urllib
 from urllib import parse
-from mayors import app, db
+from mayors import app
 from flask import render_template, url_for, redirect, request
 from mayors.models import Mayors
 
