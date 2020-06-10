@@ -31,7 +31,6 @@
                     <th>Select</th>
                 </tr>
             </thead>
-            <br>
             <tbody id="table">
                 {% for result in results %}
                 {% if result.email != 'None' %}
@@ -76,6 +75,9 @@
     </div>
 
     <div class="text-center">
+        {% if get_flashed_messages() %}
+        <span style="color : red;">{{ get_flashed_messages() }}</span><br>
+        {% endif %}
         <input type="submit" value="Generate Email">
     </div>
 </form>

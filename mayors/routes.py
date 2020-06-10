@@ -1,7 +1,7 @@
 import urllib
 from urllib import parse
 from mayors import app
-from flask import render_template, url_for, redirect, request
+from flask import render_template, url_for, redirect, request, flash
 from mayors.models import Mayors
 
 
@@ -9,9 +9,12 @@ from mayors.models import Mayors
 def index():
     if request.method == "POST":
         to = request.form.getlist('checkbox')
+        if len(to) == 0:
+            results = Mayors.query.all()
+            flash('Please select at least one recipient')
+            return redirect(url_for('index', results=results))
         body = request.form.get('body')
         subject = request.form.get('subject')
-
         link = "mailto:" + to[0] + "?BCC="
         for address in to[1:]:
             if address is not None:
